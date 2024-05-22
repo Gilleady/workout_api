@@ -1,9 +1,9 @@
 import asyncio
 from logging.config import fileConfig
 
+from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-from sqlalchemy import pool
 
 from alembic import context
 from workout_api.contrib.models import BaseModel
@@ -32,9 +32,9 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def do_run_migrations(connection: Connection) -> None: 
+def do_run_migrations(connection: Connection) -> None:
     context.configure(connection=connection, target_metadata=target_metadata)
-    
+
     with context.begin_transaction():
         context.run_migrations()
 
