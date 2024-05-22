@@ -59,11 +59,17 @@ async def post(db_session: DatabaseDependency, atleta_in: AtletaIn = Body(...)):
             detail=f"O centro de treinamento {centro_treinamento_nome} não foi encontrado.",
         )
     try:
+        created_at = datetime.utcnow()
+        id = uuid4()
         atleta_out = AtletaOut(
-            id=uuid4(), created_at=datetime.utcnow(), **atleta_in.model_dump()
+            id=id,
+            created_at=created_at,
+            **atleta_in.model_dump(exclude={"cpf", "idade", "peso", "altura", "sexo"}),
         )
         atleta_model = AtletaModel(
-            **atleta_out.model_dump(exclude={"categoria", "centro_treinamento"})
+            id=id,
+            created_at=created_at,
+            **atleta_in.model_dump(exclude={"categoria", "centro_treinamento"}),
         )
 
         atleta_model.categoria_id = categoria.pk_id
